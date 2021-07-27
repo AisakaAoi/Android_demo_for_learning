@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mList;
     private List<ItemBean> mData;
     private RecyclerViewBaseAdapter mAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,29 +48,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 找到控件
         //
-        mList = (RecyclerView) this.findViewById(R.id.recycler_view);
+        initView();
         // 准备数据
         /*
-         * 准备数据 一般来说 在显示开发中 数据是从网络获取的 此处仅为演示
+         * 准备数据 一般来说 在现实开发中 数据是从网络获取的 此处仅为演示
          * 此处模拟数据 开发中也是要模拟数据的 例如后台还未准备好时
          */
         initData();
         // 设置默认的样式为ListView的效果
         showList(true, false);
+
+        // 处理下拉刷新
+        handlerDownPullUpdate();
     }
 
-    private void initListener() {
-        mAdapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+    private void handlerDownPullUpdate() {
+        mRefreshLayout.setColorSchemeResources(R.color.purple_200, R.color.purple_500, R.color.purple_700);
+        mRefreshLayout.setEnabled(true);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onItemClick(int position) {
-                // 设置处理条目的点击事件 该跳转就跳转
-                Toast.makeText(MainActivity.this, "点击的是第" + position + "个条目", Toast.LENGTH_SHORT).show();
+            public void onRefresh() {
+                // 在这里执行刷新数据的操作
+                /**
+                 * 当在顶部下拉时 这个方法会被触发
+                 * 但这个方法是MainThread是主线程 不可以执行耗时操作
+                 * 一般来说 请求数据需要开一个线程去获取
+                 * 此处演示 直接添加一条数据
+                 */
+                // 添加数据
+                ItemBean data = new ItemBean();
+                data.title = "new insert data";
+                data.icon = R.mipmap.pic_01;
+                mData.add(0, data);
+                // 更新UI 会阻塞主线程 需要开一个新线程
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 这里做两件事 一件是让刷新停止 另一件是更新列表
+                        mAdapter.notifyDataSetChanged();
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
             }
         });
     }
 
     private void initData() {
-        // List<DataBar> -> Adapter -> setAdapter -> 显示数据
+        // List<ItemBean> -> Adapter -> setAdapter -> 显示数据
         // 创建数据集合
         mData = new ArrayList<>();
 
@@ -80,6 +107,23 @@ public class MainActivity extends AppCompatActivity {
             mData.add(data);
         }
     }
+
+    private void initView() {
+        mList = (RecyclerView) this.findViewById(R.id.recycler_view);
+        mRefreshLayout = (SwipeRefreshLayout) this.findViewById(R.id.refresh_layout);
+    }
+
+    private void initListener() {
+        mAdapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // 设置处理条目的点击事件 该跳转就跳转
+                Toast.makeText(MainActivity.this, "点击的是第" + position + "个条目", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
