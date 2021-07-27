@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:onClick="startServiceClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start service" />
+
+    <Button
+        android:onClick="stopServiceClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stop service" />
+
+    <Button
+        android:onClick="bindServiceClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bind service" />
+
+    <Button
+        android:onClick="unbindServiceClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="unbind service" />
+
+    <Button
+        android:onClick="callServiceMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="调用服务内部方法"/>
+
+</LinearLayout>

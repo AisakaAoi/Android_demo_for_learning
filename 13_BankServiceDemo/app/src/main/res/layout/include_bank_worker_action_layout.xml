@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <Button
+        android:onClick="checkUserCreditClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询用户信用"/>
+
+    <Button
+        android:onClick="freezeAccountClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="冻结用户"/>
+
+</LinearLayout>

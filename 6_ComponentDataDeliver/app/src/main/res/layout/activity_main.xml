@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:onClick="skip2Second"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="跳转到第二个界面"/>
+
+    <Button
+        android:onClick="deliverObject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="传递对象到另外一个界面"/>
+
+    <Button
+        android:onClick="call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打电话给10086"/>
+
+    <Button
+        android:onClick="sendMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发送短信"/>
+
+</LinearLayout>
