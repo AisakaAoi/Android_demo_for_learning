@@ -18,9 +18,9 @@ import java.util.List;
  * time : 2021/07/26
  * </pre>
  */
-public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerViewBaseAdapter.InnerHolder> {
+public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ItemBean> mData;
+    protected final List<ItemBean> mData;
     private OnItemClickListener mOnItemClickListener;
 
     public RecyclerViewBaseAdapter(List<ItemBean> data) {
@@ -28,7 +28,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     }
 
     @Override
-    public InnerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = getSubView(parent, viewType);
         return new InnerHolder(view);
     }
@@ -41,8 +41,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      * @param position
      */
     @Override
-    public void onBindViewHolder(ListViewAdapter.InnerHolder holder, int position) {
-        holder.setData(mData.get(position), position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((InnerHolder)holder).setData(mData.get(position), position);
     }
 
     /**

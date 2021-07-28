@@ -26,6 +26,7 @@ import com.example.a17_recycleviewdemo.utils.Datas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 1. 通过findViewById找到控件
@@ -121,9 +122,35 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "点击的是第" + position + "个条目", Toast.LENGTH_SHORT).show();
             }
         });
+        // 这里面去处理加载更多
+        if (mAdapter instanceof ListViewAdapter) {
+            ((ListViewAdapter) mAdapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
+                @Override
+                public void onUpPullRefresh(final ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+                    // 更新UI 会阻塞主线程 需要开一个新线程
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Random random = new Random();
+                            if (random.nextInt() % 2 == 0) {
+                                loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
+                            } else {
+                                // 这里面去加载更多的数据 需要在其他线程中完成
+                                // 添加数据
+                                ItemBean data = new ItemBean();
+                                data.title = "new insert data";
+                                data.icon = R.mipmap.pic_01;
+                                mData.add(data);
+                                // 这里做两件事 一件是让刷新停止 另一件是更新列表
+                                mAdapter.notifyDataSetChanged();
+                                loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_NORMAL);
+                            }
+                        }
+                    }, 1000);
+                }
+            });
+        }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
