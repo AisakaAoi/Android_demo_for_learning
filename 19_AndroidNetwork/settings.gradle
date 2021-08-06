@@ -1,0 +1,2 @@
+rootProject.name = "19_AndroidNetwork"
+include ':app'
